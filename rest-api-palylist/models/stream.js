@@ -2,6 +2,22 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+mongoose.set('useNewUrlParser', true, 'useUnifiedTopology', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
+
+// create geolocation Schema to add to stream schema seperately/less nesting 
+const GeoSchema = new Schema({
+    type: {
+        type: String,
+        default: "Point"
+    },
+    coordinates: {
+        type: [Number],
+        index: "2dsphere"
+    }
+});
 // create stream Schema & model
 const StreamSchema = new Schema({
     name: {
@@ -14,8 +30,9 @@ const StreamSchema = new Schema({
     available: {
         type: Boolean,
         default: false
-    }
+    },
     // add in geo location of Cast
+    geometry: GeoSchema
 
 });
 

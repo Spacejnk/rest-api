@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+
 require('dotenv').config();
 //console.log(process.env);
 //const routes = require('./routes/api');
@@ -12,6 +13,9 @@ const app = express();
 // connect to mongodb
 mongoose.connect('mongodb://localhost/streamon');
 mongoose.Promise = global.Promise;
+
+// static imgae and html files
+app.use(express.static('public'));
 
 app.use(bodyParser.json());
 
