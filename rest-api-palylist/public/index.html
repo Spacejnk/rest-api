@@ -11,7 +11,63 @@
     <h1 class="title">Streamon Rest API</h1>
     <div id="homepage">
         <h1>Stream Here</h1>
-        <div id="streamcrew"></div>
+        <div id="stream"></div>
     </div>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <!-- Create React Component -->
+    <script type="text/babel">
+    var Streams = React.createClass({
+        getInitialState: function(){
+            return({
+                stream: []
+            });
+        },
+
+        render:function(){
+            let stream = this.state.stream;
+            // map out individual stream
+            stream = stream.map(function(stream, index){
+                return(
+                    <li key={index}>
+                        <span className={stream.obj.available}></span>
+                        <span className="name">{stream.obj.name}</span>
+                        <span className="title">{stream.obj.title}</span>
+                        <span className="dist">{Math.floor(stream.dis / 1000)} km</span>
+                    </li>
+                );
+            });
+            return(
+                <div id="stream-container">
+                    <form id="search" onSubmit="{this.handleSubmit}">
+                        <label for="">Enter your laititude:</label>
+                        <input type="text" ref="lat" placeholder="latitude" required />
+                        <label for="">Enter your longitude:</label>
+                        <input type="text" ref="lng" placeholder="longitude" required />
+                        <input type="submit" value="find streamcrew" />
+                    </form>
+                    <ul>{stream}</ul>
+                </div>
+            );
+        },
+        handleSubmit: function(e){
+            e.preventDefault();
+            let lng = this.refs.lng.value;
+            let lat = this.refs.lat.value;
+
+            fetch('/api/stream?lng=' + lng + '&lat=' + lat).then(function(data){
+                return data.json();
+            }).then(json => {
+                this.setState({
+                    stream:json
+                });
+            });
+        }
+    });
+
+    ReactDOM.render(<Streams/>, document.getElementById('stream'));
+    </script>
 </body>
 </html>
