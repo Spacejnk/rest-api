@@ -5,60 +5,21 @@ const Stream = require('../models/stream');
 
 // get a list of stream info from db
 router.get('/stream', function(req, res, next) {
-    Stream.find({}).then(function(stream){
-         res.send(stream);
-     });
-
-    // Stream.find(
-    //     {
-    //        "geometry": {
-    //          $near: {
-    //            $geometry: {
-    //               type: "Point" ,
-    //               coordinates: [parseFloat(req.query.lng), parseFloat(req.query.lat)]
-    //            },
-              
-    //          }
-    //        }
-    //     }).then(function(stream){
+    // Stream.find({}).then(function(stream){
     //      res.send(stream);
     //  });
-    
-    // Stream.find(
-    //     {
-    //        "index": {
-    //          $near: {
-    //            $geometry: {
-    //               type: "Point" ,
-    //               coordinates: [parseFloat(req.query.lng), parseFloat(req.query.lat)]
-    //            },
-    //            $maxDistance: 1000000,
-    //           $spherical: true
-    //          }
-    //        }
-    //     })
 
-    //  Stream.find ({
+     Stream.geoNear(
+         {type: "Point" ,coordinates: [parseFloat(req.query.lng), parseFloat(req.query.lat)]}, 
+          {maxDistance: 100000, spherical: true}
+            ).then(function(stream){ 
+                res.send(stream);
+        });
+          
         
-    //     location: {
-    //        $near: {
-    //          $geometry: {
-    //             type: "Point" ,
-    //             coordinates: [parseFloat(req.query.lng), parseFloat(req.query.lat)]
-    //          },
-    //          $maxDistance: 1000000,
-    //          $spherical: true
-             
-    //        }
-           
-    //      }
-         
-    //   })
     
-
-       
     
-    // Stream.aggregate([
+     // Stream.aggregate([
     //     {"$geoNear":{
     //         "near": {
     //             "type": "Point",
@@ -74,14 +35,6 @@ router.get('/stream', function(req, res, next) {
     //          res.send();
     //      }).catch(next);
     
-
-
-    
-
-   
- 
-
-   
 });
 
 
